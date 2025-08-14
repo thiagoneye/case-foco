@@ -1,0 +1,5 @@
+#!/home/thiagoney/Documents/GitHub/case-foco/env/bin/python3.13
+
+from idlelib.pyshell import main
+if __name__ == '__main__':
+    main()

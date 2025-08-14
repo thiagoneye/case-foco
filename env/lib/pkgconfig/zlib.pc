@@ -1,0 +1,13 @@
+prefix=/home/thiagoney/Documents/GitHub/case-foco/env
+exec_prefix=/home/thiagoney/Documents/GitHub/case-foco/env
+libdir=/home/thiagoney/Documents/GitHub/case-foco/env/lib
+sharedlibdir=/home/thiagoney/Documents/GitHub/case-foco/env/lib
+includedir=/home/thiagoney/Documents/GitHub/case-foco/env/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.13
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

@@ -1,0 +1,7 @@
+prefix=/home/thiagoney/Documents/GitHub/case-foco/env
+includedir=${prefix}/include
+
+Name: RenderProto
+Description: Render extension headers
+Version: 0.11.1
+Cflags: -I${includedir}
