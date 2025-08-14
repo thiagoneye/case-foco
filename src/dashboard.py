@@ -3,6 +3,16 @@ import pandas as pd
 import numpy as np
 import plotly.express as px
 
+from statsmodels.tsa.seasonal import MSTL
+
+# Setup
+
+st.set_page_config(
+    page_title="Histórico de Locações",
+    page_icon="📈",
+    layout="wide",
+)
+
 # Data Reading
 
 df = pd.read_excel("../data/edited_dataset.xlsx")
@@ -261,6 +271,49 @@ fig.update_layout(legend_title_text="")
 st.plotly_chart(fig, use_container_width=True)
 
 ### Plot 5
+
+df_decomposition_frequency = (
+    df_filtered.groupby(df_filtered["data_inicio_locacao"].dt.date)
+    .agg(total_contratos=("id_contrato", "count"))
+    .reset_index()
+)
+df_decomposition_frequency.rename(
+    columns={"data_inicio_locacao": "Data", "total_contratos": "Contratos"},
+    inplace=True,
+)
+df_decomposition_frequency = df_decomposition_frequency.set_index("Data")
+
+decomposition_frequency = MSTL(df_decomposition_frequency["Contratos"], periods=[182, 365]).fit()
+
+fig_trend_frequency = px.line(
+    x=decomposition_frequency.trend.index,
+    y=decomposition_frequency.trend.values,
+    title="Tendência de Contratos de Locação",
+    labels={"x": "Data", "y": "Quantidade de Contratos"},
+)
+st.plotly_chart(fig_trend_frequency, use_container_width=True)
+
+### Plot 6
+
+fig_seasonality_6m_frequency = px.line(
+    x=decomposition_frequency.seasonal.index,
+    y=decomposition_frequency.seasonal.iloc[:, 0].values,
+    title="Padrão Sazonal de 6 Meses",
+    labels={"x": "Data", "y": "Impacto Sazonal"},
+)
+st.plotly_chart(fig_seasonality_6m_frequency, use_container_width=True)
+
+### Plot 7
+
+fig_seasonality_12m_frequency = px.line(
+    x=decomposition_frequency.seasonal.index,
+    y=decomposition_frequency.seasonal.iloc[:, 1].values,
+    title="Padrão Sazonal de 12 Meses",
+    labels={"x": "Data", "y": "Impacto Sazonal"},
+)
+st.plotly_chart(fig_seasonality_12m_frequency, use_container_width=True)
+
+### Plot 8
 st.subheader("Diária Média")
 
 df_ma_daily = (
@@ -310,3 +363,46 @@ fig.update_traces(
 fig.update_layout(legend_title_text="")
 
 st.plotly_chart(fig, use_container_width=True)
+
+### Plot 9
+
+df_decomposition_daily = (
+    df_filtered.groupby(df_filtered["data_inicio_locacao"].dt.date)
+    .agg(total_contratos=("id_contrato", "count"))
+    .reset_index()
+)
+df_decomposition_daily.rename(
+    columns={"data_inicio_locacao": "Data", "total_contratos": "Contratos"},
+    inplace=True,
+)
+df_decomposition_daily = df_decomposition_daily.set_index("Data")
+
+decomposition_daily = MSTL(df_decomposition_daily["Contratos"], periods=[182, 365]).fit()
+
+fig_trend_daily = px.line(
+    x=decomposition_daily.trend.index,
+    y=decomposition_daily.trend.values,
+    title="Tendência de Contratos de Locação",
+    labels={"x": "Data", "y": "Quantidade de Contratos"},
+)
+st.plotly_chart(fig_trend_daily, use_container_width=True)
+
+### Plot 10
+
+fig_seasonality_3m_daily = px.line(
+    x=decomposition_daily.seasonal.index,
+    y=decomposition_daily.seasonal.iloc[:, 0].values,
+    title="Padrão Sazonal de 3 Meses",
+    labels={"x": "Data", "y": "Impacto Sazonal"},
+)
+st.plotly_chart(fig_seasonality_3m_daily, use_container_width=True)
+
+### Plot 11
+
+fig_seasonality_12m_daily = px.line(
+    x=decomposition_daily.seasonal.index,
+    y=decomposition_daily.seasonal.iloc[:, 1].values,
+    title="Padrão Sazonal de 12 Meses",
+    labels={"x": "Data", "y": "Impacto Sazonal"},
+)
+st.plotly_chart(fig_seasonality_12m_daily, use_container_width=True)
