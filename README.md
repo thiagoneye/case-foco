@@ -15,7 +15,7 @@ O objetivo deste desafio foi utilizar uma base de dados histórica fictícia de 
 1.  **Diárias Locadas:** O total de diárias de locação por mês.
 2.  **Diária Média:** O preço médio das diárias de locação por mês.
 
-O período da projeção abrange de **julho/2025 a junho/2026**.
+O período da projeção abrange de **julho/2024 a junho/2025**.
 
 ---
 
@@ -26,10 +26,10 @@ O projeto seguiu o fluxo abaixo, com todos os detalhes e códigos documentados e
 #### 1. Análise Exploratória e Descritiva dos Dados (EDA)
 Nesta fase, a base de dados foi cuidadosamente examinada para compreender a sua estrutura e as características das variáveis. As análises incluíram:
 
-* **Identificação de Tendências:** Observação do comportamento de longo prazo dos indicadores ao longo do tempo.
-* **Padrões Sazonais:** Análise de repetições de padrões em intervalos regulares (semanal, mensal, anual), como picos de locação em feriados ou meses específicos.
 * **Distribuição das Variáveis:** Visualização da distribuição de variáveis-chave como `duracao_locacao`, `dias_antecedencia` e `diaria_media`.
 * **Comparações de Agrupamentos:** Análise das diferenças de desempenho entre lojas, categorias de veículos e a influência da localização (`cidade`, `estado`).
+* **Identificação de Tendências:** Observação do comportamento de longo prazo dos indicadores ao longo do tempo.
+* **Padrões Sazonais:** Análise de repetições de padrões em intervalos regulares (semanal, mensal, anual), como picos de locação em feriados ou meses específicos.
 
 #### 2. Modelagem Preditiva
 Para a previsão dos indicadores, foram utilizados 4 modelos de machine learning, cada um com diferentes abordagens para séries temporais:
@@ -54,5 +54,5 @@ Nesta etapa, o foco foi transformar os resultados da modelagem em insights acion
 
 A entrega deste desafio consiste em dois documentos:
 
-1.  **`notebook.ipynb`**: Um Jupyter Notebook completo, com todos os códigos, gráficos e análises minuciosamente comentados, detalhando cada etapa do pipeline.
+1.  **`notebook.ipynb`**: Um Jupyter Notebook completo, com todos os códigos, gráficos e análises comentados, detalhando cada etapa do pipeline.
 2.  **`apresentacao_executiva.pdf`**: Um documento em formato PDF (ou slides) que resume os principais insights, resultados da modelagem e a recomendação final de forma clara e concisa, ideal para um público executivo.
