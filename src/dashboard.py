@@ -60,10 +60,9 @@ st.title(f"Análise Exploratória de Locações")
 ### Plot 1
 st.subheader("Estatísticas das Lojas")
 
-statistics_stores = df_filtered.copy()
-statistics_stores.rename(columns={"id_loja": "Lojas"}, inplace=True)
+df_filtered.rename(columns={"id_loja": "Lojas"}, inplace=True)
 
-statistics_stores = statistics_stores.groupby("Lojas").agg(
+statistics_stores = df_filtered.groupby("Lojas").agg(
     id_contrato_count=("id_contrato", "count"),
     diaria_media=("diaria_media", "mean"),
     valor_total_min=("valor_total_locacao", "min"),
@@ -145,12 +144,9 @@ st.plotly_chart(fig, use_container_width=True)
 ### Plot 3
 st.subheader("Estatísticas das Categorias de Veículos")
 
-statistics_vehicles = df_filtered.copy()
-statistics_vehicles.rename(
-    columns={"categoria_veiculo": "Categoria de Veículo"}, inplace=True
-)
+df_filtered.rename(columns={"categoria_veiculo": "Categoria de Veículo"}, inplace=True)
 
-statistics_vehicles = statistics_vehicles.groupby("Categoria de Veículo").agg(
+statistics_vehicles = df_filtered.groupby("Categoria de Veículo").agg(
     id_contrato_count=("id_contrato", "count"),
     diaria_media=("diaria_media", "mean"),
     valor_total_min=("valor_total_locacao", "min"),
@@ -214,39 +210,36 @@ statistics_vehicles.rename(
 st.dataframe(statistics_vehicles)
 
 ### Plot 4
-st.subheader("Histórico de Contratos")
+st.subheader("Quantidade de Contratos")
 
-moving_average_df = df_filtered.copy()
-moving_average_df = (
-    moving_average_df.groupby(moving_average_df["data_inicio_locacao"].dt.date)
+df_ma_frequency = (
+    df_filtered.groupby(df_filtered["data_inicio_locacao"].dt.date)
     .agg(total_contratos=("id_contrato", "count"))
     .reset_index()
 )
 
-moving_average_df.rename(
+df_ma_frequency.rename(
     columns={"data_inicio_locacao": "Data", "total_contratos": "Contratos"},
     inplace=True,
 )
-moving_average_df["Data"] = pd.to_datetime(moving_average_df["Data"])
-moving_average_df.set_index("Data", inplace=True)
+df_ma_frequency["Data"] = pd.to_datetime(df_ma_frequency["Data"])
+df_ma_frequency.set_index("Data", inplace=True)
 
-moving_average_df["Suavização 7 dias"] = (
-    moving_average_df["Contratos"].rolling(window="7D").mean()
+df_ma_frequency["Suavização 7 dias"] = (
+    df_ma_frequency["Contratos"].rolling(window="7D").mean()
 )
-moving_average_df["Suavização 30 dias"] = (
-    moving_average_df["Contratos"].rolling(window="30D").mean()
+df_ma_frequency["Suavização 30 dias"] = (
+    df_ma_frequency["Contratos"].rolling(window="30D").mean()
 )
-moving_average_df["Suavização 90 dias"] = (
-    moving_average_df["Contratos"].rolling(window="90D").mean()
+df_ma_frequency["Suavização 90 dias"] = (
+    df_ma_frequency["Contratos"].rolling(window="90D").mean()
 )
 
 fig = px.line(
-    moving_average_df,
+    df_ma_frequency,
     y=["Contratos", "Suavização 7 dias", "Suavização 30 dias", "Suavização 90 dias"],
-    title="Histórico de Contratos",
     labels={"value": "Quantidade de Contratos", "Data": "Data"},
 )
-
 fig.update_traces(
     line=dict(width=1, color="rgba(192, 192, 192, 0.25)"),
     selector=dict(name="Contratos"),
@@ -263,7 +256,57 @@ fig.update_traces(
     line=dict(width=3, color="rgba(0, 0, 128, 1)"),
     selector=dict(name="Suavização 90 dias"),
 )
+fig.update_layout(legend_title_text="")
 
+st.plotly_chart(fig, use_container_width=True)
+
+### Plot 5
+st.subheader("Diária Média")
+
+df_ma_daily = (
+    df_filtered.groupby(df_filtered["data_inicio_locacao"].dt.date)
+    .agg(diaria_media=("diaria_media", "mean"))
+    .reset_index()
+)
+
+df_ma_daily.rename(
+    columns={"data_inicio_locacao": "Data", "diaria_media": "Diária Média"},
+    inplace=True,
+)
+df_ma_daily["Data"] = pd.to_datetime(df_ma_daily["Data"])
+df_ma_daily.set_index("Data", inplace=True)
+
+df_ma_daily["Suavização 7 dias"] = (
+    df_ma_daily["Diária Média"].rolling(window="7D").mean()
+)
+df_ma_daily["Suavização 30 dias"] = (
+    df_ma_daily["Diária Média"].rolling(window="30D").mean()
+)
+df_ma_daily["Suavização 90 dias"] = (
+    df_ma_daily["Diária Média"].rolling(window="90D").mean()
+)
+
+fig = px.line(
+    df_ma_daily,
+    y=["Diária Média", "Suavização 7 dias", "Suavização 30 dias", "Suavização 90 dias"],
+    labels={"value": "Diária Média", "Data": "Data"},
+)
+fig.update_traces(
+    line=dict(width=1, color="rgba(192, 192, 192, 0.25)"),
+    selector=dict(name="Diária Média"),
+)
+fig.update_traces(
+    line=dict(width=2, color="rgba(135, 206, 235, 0.75)"),
+    selector=dict(name="Suavização 7 dias"),
+)
+fig.update_traces(
+    line=dict(width=3, color="rgba(65, 105, 225, 1)"),
+    selector=dict(name="Suavização 30 dias"),
+)
+fig.update_traces(
+    line=dict(width=3, color="rgba(0, 0, 128, 1)"),
+    selector=dict(name="Suavização 90 dias"),
+)
 fig.update_layout(legend_title_text="")
 
 st.plotly_chart(fig, use_container_width=True)
