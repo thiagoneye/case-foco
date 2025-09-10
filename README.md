@@ -27,16 +27,15 @@ O projeto seguiu o fluxo abaixo, com todos os detalhes e códigos documentados e
 Nesta fase, a base de dados foi cuidadosamente examinada para compreender a sua estrutura e as características das variáveis. As análises incluíram:
 
 * **Distribuição das Variáveis:** Visualização da distribuição de variáveis-chave como `duracao_locacao`, `dias_antecedencia` e `diaria_media`.
-* **Comparações de Agrupamentos:** Análise das diferenças de desempenho entre lojas, categorias de veículos e a influência da localização (`cidade`, `estado`).
+* **Comparações de Agrupamentos:** Análise das diferenças de desempenho entre lojas e categorias de veículos.
 * **Identificação de Tendências:** Observação do comportamento de longo prazo dos indicadores ao longo do tempo.
 * **Padrões Sazonais:** Análise de repetições de padrões em intervalos regulares (semanal, mensal, anual), como picos de locação em feriados ou meses específicos.
 
 #### 2. Modelagem Preditiva
 Para a previsão dos indicadores, foram utilizados 4 modelos de machine learning, cada um com diferentes abordagens para séries temporais:
 
-* **Modelos de Regressão:** `Random Forest Regressor` e `XGBoost Regressor` foram aplicados para capturar relações não lineares entre as variáveis e o tempo, utilizando técnicas de feature engineering para incluir a sazonalidade e a tendência.
+* **Modelos de Regressão:** `Linear Regressor`, `Random Forest Regressor` e `XGBoost Regressor` foram aplicados para capturar relações não lineares entre as variáveis e o tempo, utilizando técnicas de feature engineering para incluir a sazonalidade e a tendência.
 * **Modelos de Séries Temporais Clássicos/Avançados:**
-    * `Prophet` (da Meta): Um modelo robusto para séries temporais com múltiplas sazonalidades, feriados e tendências não lineares.
     * `ARIMA`: Um modelo estatístico clássico que utiliza a autocorrelação dos dados passados para fazer previsões.
 
 Cada modelo foi avaliado com as métricas **RMSE**, **MAE** e **MAPE**, utilizando a técnica de backtesting para garantir uma validação rigorosa das projeções.
@@ -45,7 +44,7 @@ Cada modelo foi avaliado com as métricas **RMSE**, **MAE** e **MAPE**, utilizan
 Nesta etapa, o foco foi transformar os resultados da modelagem em insights acionáveis para a Foco.
 
 * **Impacto das Variáveis:** Foram identificadas e destacadas as variáveis com maior poder preditivo, como sazonalidade anual e mensal.
-* **Comparação de Modelos:** Uma análise comparativa das métricas de desempenho foi realizada para entender as vantagens e desvantagens de cada modelo. O `Prophet`, por exemplo, se mostrou eficaz em capturar a sazonalidade complexa, enquanto o `XGBoost` foi capaz de lidar com a complexidade das interações entre as features.
+* **Comparação de Modelos:** Uma análise comparativa das métricas de desempenho foi realizada para entender as vantagens e desvantagens de cada modelo. O `ARIMA`, por exemplo, se mostrou eficaz em capturar a sazonalidade complexa.
 * **Recomendação Final:** Com base nas métricas de avaliação e na interpretabilidade, foi recomendada a utilização de um dos modelos como a principal ferramenta de previsão, justificando a escolha para a tomada de decisão executiva.
 
 ---
